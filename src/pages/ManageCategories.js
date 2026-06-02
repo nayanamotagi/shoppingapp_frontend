@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAbility } from '../context/AbilityContext';
 import { useAuth } from '../context/AuthContext';
+import { getApiBaseUrl } from '../config/apiConfig';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = getApiBaseUrl();
 
 const ManageCategories = () => {
   const [categories, setCategories] = useState([]);

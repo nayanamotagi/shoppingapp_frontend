@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import ProductImage from '../components/ProductImage';
+import { getApiBaseUrl } from '../config/apiConfig';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = getApiBaseUrl();
 
 const Cart = () => {
   const { cart, updateQuantity, removeFromCart, getCartTotal, getCartItems, clearCart } = useCart();

@@ -4,8 +4,9 @@ import axios from 'axios';
 import { useAbility } from '../context/AbilityContext';
 import { useCart } from '../context/CartContext';
 import ProductImage from '../components/ProductImage';
+import { getApiBaseUrl } from '../config/apiConfig';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = getApiBaseUrl();
 
 const Home = () => {
   const [products, setProducts] = useState([]);

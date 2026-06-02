@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { getApiBaseUrl } from '../config/apiConfig';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = getApiBaseUrl();
 
 const Payment = () => {
   const navigate = useNavigate();
@@ -18,11 +19,11 @@ const Payment = () => {
     }
 
     setProcessing(true);
-    
+
     try {
       // Simulate payment processing delay
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
+
       // Process payment
       const response = await axios.post(
         `${API_URL}/orders/${orderId}/payment`,
@@ -42,7 +43,7 @@ const Payment = () => {
     } catch (error) {
       alert(error.response?.data?.message || 'Payment failed. Please try again.');
     }
-    
+
     setProcessing(false);
   };
 
@@ -94,7 +95,7 @@ const Payment = () => {
             </div>
             <div className="bg-yellow-50 border border-yellow-200 rounded p-4">
               <p className="text-sm text-yellow-800">
-                <strong>Note:</strong> This is a simulated payment system for educational purposes. 
+                <strong>Note:</strong> This is a simulated payment system for educational purposes.
                 No real money will be charged.
               </p>
             </div>

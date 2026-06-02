@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getApiBaseUrl } from '../config/apiConfig';
 
 const ProductImage = ({ src, alt, className = "w-full h-48 object-cover" }) => {
   const [imgSrc, setImgSrc] = useState('');
@@ -19,18 +20,18 @@ const ProductImage = ({ src, alt, className = "w-full h-48 object-cover" }) => {
   // Convert relative URLs to absolute
   const getImageUrl = (url) => {
     if (!url) return 'https://via.placeholder.com/300?text=No+Image';
-    
+
     // If it's already a full URL, return as is
     if (url.startsWith('http://') || url.startsWith('https://')) {
       return url;
     }
-    
+
     // If it's a relative path starting with /uploads, make it absolute
     if (url.startsWith('/uploads/')) {
-      const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const API_URL = getApiBaseUrl().replace('/api', '');
       return `${API_URL}${url}`;
     }
-    
+
     return url;
   };
 

@@ -4,8 +4,9 @@ import axios from 'axios';
 import { useAbility } from '../context/AbilityContext';
 import { useCart } from '../context/CartContext';
 import ProductImage from '../components/ProductImage';
+import { getApiBaseUrl } from '../config/apiConfig';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = getApiBaseUrl();
 
 const CategoryProducts = () => {
   const { categoryName } = useParams();
@@ -80,8 +81,8 @@ const CategoryProducts = () => {
           {products.map((product) => (
             <div key={product._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
               <Link to={`/products/${product._id}`} className="block">
-                <ProductImage 
-                  src={product.image} 
+                <ProductImage
+                  src={product.image}
                   alt={product.name}
                   className="w-full h-48 object-cover"
                 />

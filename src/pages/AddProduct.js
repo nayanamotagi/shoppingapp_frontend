@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { getApiBaseUrl } from '../config/apiConfig';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = getApiBaseUrl();
 
 const AddProduct = () => {
   const [formData, setFormData] = useState({
@@ -111,7 +112,7 @@ const AddProduct = () => {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      
+
       // Navigate based on user role
       if (user?.role === 'admin') {
         navigate('/products');
@@ -157,7 +158,7 @@ const AddProduct = () => {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Price (₹)
+              Price (₹)
             </label>
             <input
               type="number"

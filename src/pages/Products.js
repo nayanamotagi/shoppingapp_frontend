@@ -5,8 +5,9 @@ import { useAbility } from '../context/AbilityContext';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import ProductImage from '../components/ProductImage';
+import { getApiBaseUrl } from '../config/apiConfig';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = getApiBaseUrl();
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -76,8 +77,8 @@ const Products = () => {
           </svg>
           <h3 className="mt-4 text-lg font-medium text-gray-900">No products found</h3>
           <p className="mt-2 text-sm text-gray-500">
-            {ability.can('create', 'Product') 
-              ? 'Get started by adding your first product!' 
+            {ability.can('create', 'Product')
+              ? 'Get started by adding your first product!'
               : 'Check back later for new products.'}
           </p>
           {ability.can('create', 'Product') && (
@@ -97,51 +98,62 @@ const Products = () => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map((product) => (
-          <div key={product._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
-            <Link to={`/products/${product._id}`} className="block">
-              <ProductImage 
-                src={product.image} 
-                alt={product.name}
-                className="w-full h-48 object-cover"
-              />
-            </Link>
-            <div className="p-4">
+            <div key={product._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
               <Link to={`/products/${product._id}`} className="block">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600">
-                  {product.name}
-                </h3>
+                <ProductImage
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-48 object-cover"
+                />
               </Link>
-              <Link 
-                to={`/categories/${encodeURIComponent(product.category)}`}
-                className="text-blue-600 text-sm mb-2 hover:text-blue-800 hover:underline inline-block"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {product.category}
-              </Link>
-              <p className="text-2xl font-bold text-blue-600 mb-4">₹{product.price}</p>
-              <div className="flex items-center justify-between">
-                {ability.can('create', 'Order') && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleAddToCart(product);
-                    }}
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                  >
-                    Add to Cart
-                  </button>
-                )}
-                {ability.can('delete', 'Product') && (
-                  <div className="flex space-x-2">
-                    {user && user.role === 'seller' && (product.sellerId._id || product.sellerId) === user.id ? (
-                      <>
-                        <Link
-                          to={`/seller/products/edit/${product._id}`}
-                          onClick={(e) => e.stopPropagation()}
-                          className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700"
-                        >
-                          Edit
-                        </Link>
+              <div className="p-4">
+                <Link to={`/products/${product._id}`} className="block">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600">
+                    {product.name}
+                  </h3>
+                </Link>
+                <Link
+                  to={`/categories/${encodeURIComponent(product.category)}`}
+                  className="text-blue-600 text-sm mb-2 hover:text-blue-800 hover:underline inline-block"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {product.category}
+                </Link>
+                <p className="text-2xl font-bold text-blue-600 mb-4">₹{product.price}</p>
+                <div className="flex items-center justify-between">
+                  {ability.can('create', 'Order') && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleAddToCart(product);
+                      }}
+                      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                    >
+                      Add to Cart
+                    </button>
+                  )}
+                  {ability.can('delete', 'Product') && (
+                    <div className="flex space-x-2">
+                      {user && user.role === 'seller' && (product.sellerId._id || product.sellerId) === user.id ? (
+                        <>
+                          <Link
+                            to={`/seller/products/edit/${product._id}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700"
+                          >
+                            Edit
+                          </Link>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(product._id);
+                            }}
+                            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                          >
+                            Delete
+                          </button>
+                        </>
+                      ) : user && user.role === 'admin' ? (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
@@ -151,24 +163,13 @@ const Products = () => {
                         >
                           Delete
                         </button>
-                      </>
-                    ) : user && user.role === 'admin' ? (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(product._id);
-                        }}
-                        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-                      >
-                        Delete
-                      </button>
-                    ) : null}
-                  </div>
-                )}
+                      ) : null}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
         </div>
       )}
     </div>
